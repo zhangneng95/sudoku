@@ -8,12 +8,61 @@
 
 	<script src="http://apps.bdimg.com/libs/jquery/1.8.1/jquery.min.js"></script>
 	<script>
-		//创建一个9*9的数组
-		var sudokuArr = new Array(9);
-		for (var i = 0;i < sudokuArr.length;i++) {
-			sudokuArr[i] = new Array(9);
+		//基础数组为数字1-9
+		var baseArr = [1,2,3,4,5,6,7,8,9];
+		var sudokuArr = createNewArr();
+		//重新产生起始数组
+		function createNewArr() {
+			var sudokuArr = new Array(9);
+			for (var i = 0;i < sudokuArr.length;i++) {
+				sudokuArr[i] = new Array(9);
+			}
+			sudokuArr[0] = shuffle();
+			return sudokuArr;
 		}
-		console.log(sudokuArr);
+		
+		
+		//计算生产数独的时间
+		function calTime(){
+			var beginTime = +new Date();
+			get9Grid();
+			var endTime = +new Date();
+			console.log("排序用时共计"+(endTime-beginTime)+"ms");
+		}
+		
+		
+		
+		
+		//生产数独
+		function get9Grid() {
+		try{
+			sudokuArr = createNewArr();
+			//第一排已经自动生成了，所以从第二排开始
+			for(var i = 1; i < 9; i++) {
+				for(var j = 0; j <9; j++) {
+					//分别找到3宫格，行和列已经存在的数字
+					var centerXY = getCenter(i,j);
+					var arr1 = get3Grid(centerXY[0],centerXY[1]);
+					var arr2 = isXRepeat(j,sudokuArr);
+					var arr3 = isYRepeat(i,sudokuArr);
+					//找到可以使用的数字
+					var ableArr = baseArr.diff(arr1.intersect(arr2.intersect(arr3)));
+					if(ableArr.length == 0){
+						get9Grid();
+						return;
+					}
+					
+					var item;
+					item = ableArr[Math.floor(Math.random()*(ableArr.length))];
+
+					sudokuArr[i][j] = item;
+				}
+			}
+		}catch(e){
+			get9Grid();
+		}
+			console.log(sudokuArr);
+		}
 		
 		//把1-9随机排列的算法
 		function shuffle(){
@@ -30,8 +79,8 @@
 		
 		//根据坐标获取所在的三宫格的中间坐标
 		function getCenter(x,y) {
-			var xArr = Math.floor((x-1)/3)*3+2;
-			var yArr = Math.floor((y-1)/3)*3+2;
+			var xArr = Math.floor(x/3)*3+1;
+			var yArr = Math.floor(y/3)*3+1;
 			var center=[xArr,yArr];
 			return center;
 		}
@@ -40,44 +89,50 @@
 		function get3Grid(x,y){
 			var arr3Grid = [];
 			for(var i = x-1; i < (x+2); i++)
-				for(var j = x-1; j < (x+2); j++) {
-					if(sudokuArr[i][i] == null) continue;
+				for(var j = y-1; j < (y+2); j++) {
+					if(sudokuArr[i][j] == null) continue;
 					else {
-						arr3Grid.push(sudokuArr[i][i]);
+						arr3Grid.push(sudokuArr[i][j]);
 					}
 				}
 			return arr3Grid;
 		}
 		
 		//把九宫格数组实体化
-		function showTable() {
-			var html ='<ul>';
-			html = html + new Array(10).join('<li style="list-style: none;">' + new Array(10).join('<span>111 </span>') + '</li>')+'</ul>';
-			$("body").prepend(html);
-		}
+		//function showTable() {
+		//	var html ='<ul>';
+		//	html = html + new Array(10).join('<li style="list-style: none;">' + new Array(10).join('<span>111 </span>') + '</li>')+'</ul>';
+		//	$("body").prepend(html);
+		//}
 		
-		//判断是否在横列重复
-		function isXRepeat(x,y,arr) {
-			for(var i = 0;i < 10; i++) {
-				if(arr[i][y] == null || i == x) continue;
-				else if(arr[i][y] == arr[x][y]) return true;
-				return true;
+		//返回某行的所有值
+		function isXRepeat(y,arr) {
+			var arry = [];
+			for(var i = 0;i < 9; i++) {
+				if(arr[i][y] != null) arry.push(arr[i][y]);
 			}
+			return arry;
 		}
 		
-		//判断是否在竖列重复
-		function isXRepeat(x,y,arr) {
-			for(var i = 0;i < 10; i++) {
-				if(arr[x][i] == null || i == y) continue;
-				else if(arr[x][i] == arr[x][y]) return true;
-				return true;
+		//返回某列的所有值
+		function isYRepeat(x,arr) {
+			var arry = [];
+			for(var i = 0;i < 9; i++) {
+				if(arr[x][i] != null) arry.push(arr[x][i]);
 			}
+			return arry;			
+
 		}
 		
-		//生成数独数组
-		function creatSudokuArr() {
-			var arr = shuffle();
-		}
+		//求出两个集合的差集
+		Array.prototype.diff = function (arr) {
+			return this.filter(function(i) {return arr.indexOf(i) < 0;});
+		};
+		//求出两个集合的并集
+		Array.prototype.intersect = function (arr) {
+			var a = this;
+			return this.concat(arr.filter(function(i) {return !(a.indexOf(i) >-1);}));
+		};
 
 	</script>
 </body>
