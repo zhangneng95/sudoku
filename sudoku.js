@@ -25,32 +25,36 @@
 		
 		//生产数独
 		function get9Grid() {
-		try{
-			sudokuArr = createNewArr();
-			//第一排已经自动生成了，所以从第二排开始
-			for(var i = 1; i < 9; i++) {
-				for(var j = 0; j <9; j++) {
-					//分别找到3宫格，行和列已经存在的数字
-					var centerXY = getCenter(i,j);
-					var arr1 = get3Grid(centerXY[0],centerXY[1]);
-					var arr2 = isXRepeat(j,sudokuArr);
-					var arr3 = isYRepeat(i,sudokuArr);
-					//找到可以使用的数字
-					var ableArr = baseArr.diff(arr1.intersect(arr2.intersect(arr3)));
-					if(ableArr.length == 0){
-						get9Grid();
-						return;
-					}
-					
-					var item;
-					item = ableArr[Math.floor(Math.random()*(ableArr.length))];
-
-					sudokuArr[i][j] = item;
-				}
+			//如果存在9宫格 则把他删除
+			var mytable = document.getElementById("sudokuTable");
+			if(mytable) {
+				var parentObj = mytable.parentNode;
+				parentObj.removeChild(mytable);
 			}
-		}catch(e){
-			get9Grid();
-		}
+			try{
+				sudokuArr = createNewArr();
+				//第一排已经自动生成了，所以从第二排开始
+				for(var i = 1; i < 9; i++) {
+					for(var j = 0; j <9; j++) {
+						//分别找到3宫格，行和列已经存在的数字
+						var centerXY = getCenter(i,j);
+						var arr1 = get3Grid(centerXY[0],centerXY[1]);
+						var arr2 = isXRepeat(j,sudokuArr);
+						var arr3 = isYRepeat(i,sudokuArr);
+						//找到可以使用的数字
+						var ableArr = baseArr.diff(arr1.intersect(arr2.intersect(arr3)));
+						if(ableArr.length == 0){
+							get9Grid();
+							return;
+						}
+						var num;
+						num = ableArr[Math.floor(Math.random()*(ableArr.length))];
+						sudokuArr[i][j] = num;
+					}
+				}
+			}catch(e){
+				get9Grid();
+			}
 			console.log(sudokuArr);
 			showTable();
 		}
@@ -120,7 +124,11 @@
 				if(arr[x][i] != null) arry.push(arr[x][i]);
 			}
 			return arry;			
-
+		}
+		
+		//随机抠出几个数字
+		function createBlank(){
+			
 		}
 		
 		//求出两个集合的差集
