@@ -126,8 +126,23 @@
 			return arry;			
 		}
 		
-		//随机抠出几个数字
-		function createBlank(){
+		//每个三宫格的中心 挖出两个数字
+		function Blank(){
+			var mytable = document.getElementById("sudokuTable");
+			for(var i = 0; i < 9; i++) {
+				//三宫格中心为[i,j]
+				var j = Math.floor(i/3)*3+1;
+				var k = (i%3)*3+1;
+				var num1 = Math.floor(Math.random()*9);
+				var num2 = Math.floor(Math.random()*9);
+				do{
+					num2 = Math.floor(Math.random()*9);
+				}while(num1 == num2)
+				mytable.rows[j-1+Math.floor(num1/3)].cells[k-1+(num1%3)].innerHTML = "";
+				mytable.rows[j-1+Math.floor(num1/3)].cells[k-1+(num1%3)].contentEditable = "true";
+				mytable.rows[j-1+Math.floor(num2/3)].cells[k-1+(num2%3)].innerHTML = "";
+				mytable.rows[j-1+Math.floor(num2/3)].cells[k-1+(num2%3)].contentEditable = "true";
+			}
 			
 		}
 		
