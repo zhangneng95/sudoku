@@ -38,7 +38,7 @@
 					for(var j = 0; j <9; j++) {
 						//分别找到3宫格，行和列已经存在的数字
 						var centerXY = getCenter(i,j);
-						var arr1 = get3Grid(centerXY[0],centerXY[1]);
+						var arr1 = get3Grid(centerXY[0],centerXY[1],sudokuArr);
 						var arr2 = isXRepeat(j,sudokuArr);
 						var arr3 = isYRepeat(i,sudokuArr);
 						//找到可以使用的数字
@@ -81,13 +81,13 @@
 		}
 		
 		//根据中间坐标获取这个三宫格的所有值
-		function get3Grid(x,y){
+		function get3Grid(x,y,arr){
 			var arr3Grid = [];
 			for(var i = x-1; i < (x+2); i++)
 				for(var j = y-1; j < (y+2); j++) {
-					if(sudokuArr[i][j] == null) continue;
+					if(arr[i][j] == null) continue;
 					else {
-						arr3Grid.push(sudokuArr[i][j]);
+						arr3Grid.push(arr[i][j]);
 					}
 				}
 			return arr3Grid;
@@ -126,7 +126,7 @@
 			return arry;			
 		}
 		
-		//每个三宫格的中心 挖出两个数字
+		//每个三宫格的中心 挖出两个数字,并使这两个数字可编辑
 		function Blank(){
 			var mytable = document.getElementById("sudokuTable");
 			for(var i = 0; i < 9; i++) {
@@ -146,6 +146,38 @@
 			
 		}
 		
+		//检测 是否完成
+		function checkFinished(){
+			var mytable = document.getElementById("sudokuTable");
+			var finArr = new Array(9);
+			for (var i = 0;i < finArr.length;i++) {
+				finArr[i] = new Array(9);
+			}
+			for(var i = 0; i < 9; i++) 
+				for(var j = 0; j < 9; j++) {
+					if(!mytable.rows[i].cells[j].innerHTML){
+						//alert("第"+(i+1)+"行第"+(j+1)+"列没有填空");
+						//return;
+					}
+					finArr[i][j] = mytable.rows[i].cells[j].innerHTML;
+			}
+			for(var i = 0; i < 9; i++) {
+				for(var j = 1; j <9; j++) {
+					//分别找到3宫格，行和列已经存在的数字
+					var centerXY = getCenter(i,j);
+					var arr1 = get3Grid(centerXY[0],centerXY[1],finArr);
+					var arr2 = isXRepeat(j,sudokuArr);
+					var arr3 = isYRepeat(i,sudokuArr);
+					//如果重复 
+					if(countOccurences(arr1,finArr[i][j])>1 || countOccurences(arr2,finArr[i][j])>1 || countOccurences(arr3,finArr[i][j])>1) {
+						alert("第"+(i+1)+"行第"+(j+1)+"列数字重复");
+						return;
+					}
+				}
+			}
+			alert("胜利！完成数独");
+		}
+		
 		//求出两个集合的差集
 		Array.prototype.diff = function (arr) {
 			return this.filter(function(i) {return arr.indexOf(i) < 0;});
@@ -155,3 +187,5 @@
 			var a = this;
 			return this.concat(arr.filter(function(i) {return !(a.indexOf(i) >-1);}));
 		};
+		//重复次数的函数
+		const countOccurences = (arr, value) => arr.reduce((a, v) => v === value ? a + 1 : a + 0, 0);
