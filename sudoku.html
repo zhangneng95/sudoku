@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
     <title>数独</title>
 </head>
-<body>
+<body  style="text-align:center;">
 	<!-- table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
 		<tr>
 			<td>1</td>
@@ -26,9 +26,18 @@
 			<td>wing</td>
 		</tr>
 </table -->  
+	<div id = "btn_group">
+		<button onclick = "checkFinished()">完成</button>
+		<button onclick = "showAnswer()">显示答案</button>
+		<button onclick = "get9Grid()">重新开始</button>
+	</div>
+	<div id = "btn_reset">
+		<button onclick = "get9Grid()">再玩一次</button>
+	</div>
 	<script src="jquery-3.2.1.min.js"></script>
 	<script src="sudoku.js"></script>
 	<script>
 		get9Grid();
 	</script>
 </body>
+</html>

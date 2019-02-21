@@ -26,11 +26,6 @@
 		//生产数独
 		function get9Grid() {
 			//如果存在9宫格 则把他删除
-			var mytable = document.getElementById("sudokuTable");
-			if(mytable) {
-				var parentObj = mytable.parentNode;
-				parentObj.removeChild(mytable);
-			}
 			try{
 				sudokuArr = createNewArr();
 				//第一排已经自动生成了，所以从第二排开始
@@ -57,6 +52,7 @@
 			}
 			console.log(sudokuArr);
 			showTable();
+			Blanks();
 		}
 		
 		//把1-9随机排列的算法
@@ -95,6 +91,11 @@
 		
 		//把九宫格数组实体化
 		function showTable() {
+			var mytable = document.getElementById("sudokuTable");
+			if(mytable) {
+				var parentObj = mytable.parentNode;
+				parentObj.removeChild(mytable);
+			}
 			var html ='<table id="sudokuTable" border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:auto; text-align:center" bordercolor="#111111" width="180">';
 			html = html + new Array(10).join('<tr>' + new Array(10).join('<td>1</td>') + '</tr>')+'</table>';
 			$("body").prepend(html);
@@ -106,6 +107,8 @@
 						mytable.rows[i].cells[j].innerHTML = sudokuArr[i][j];
 					}
 			}
+			document.getElementById("btn_reset").style.visibility="hidden"
+			document.getElementById("btn_group").style.visibility="visible"
 		}
 		
 		//返回某行的所有值
@@ -127,7 +130,7 @@
 		}
 		
 		//每个三宫格的中心 挖出两个数字,并使这两个数字可编辑
-		function Blank(){
+		function Blanks(){
 			var mytable = document.getElementById("sudokuTable");
 			for(var i = 0; i < 9; i++) {
 				//三宫格中心为[i,j]
@@ -156,8 +159,8 @@
 			for(var i = 0; i < 9; i++) 
 				for(var j = 0; j < 9; j++) {
 					if(!mytable.rows[i].cells[j].innerHTML){
-						//alert("第"+(i+1)+"行第"+(j+1)+"列没有填空");
-						//return;
+						alert("第"+(i+1)+"行第"+(j+1)+"列没有填空");
+						return;
 					}
 					finArr[i][j] = mytable.rows[i].cells[j].innerHTML;
 			}
@@ -176,7 +179,23 @@
 				}
 			}
 			alert("胜利！完成数独");
+			document.getElementById("btn_group").style.visibility="hidden"
+			document.getElementById("btn_reset").style.visibility="visible"
 		}
+		
+		//显示答案
+		function showAnswer() {
+			showTable();
+			document.getElementById("btn_group").style.visibility="hidden"
+			document.getElementById("btn_reset").style.visibility="visible"
+		}
+		
+		//再玩一次按钮
+		//function playAgain() {
+			//get9Grid();
+			//document.getElementById("btn_reset").style.visibility="hidden"
+			//document.getElementById("btn_group").style.visibility="visible"
+		//}
 		
 		//求出两个集合的差集
 		Array.prototype.diff = function (arr) {
