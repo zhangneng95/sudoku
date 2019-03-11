@@ -99,7 +99,7 @@
 			var html ='<table id="sudokuTable" border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin:auto; text-align:center" bordercolor="#111111" width="180">';
 			html = html + new Array(10).join('<tr>' + new Array(10).join('<td>1</td>') + '</tr>')+'</table>';
 			$("body").prepend(html);
-			
+			//数字填入
 			var mytable = document.getElementById("sudokuTable");
 			for(var i = 0; i < 9; i++) 
 				for(var j = 0; j < 9; j++) {
@@ -107,13 +107,24 @@
 						mytable.rows[i].cells[j].innerHTML = sudokuArr[i][j];
 					}
 			}
+			//三宫格边框加粗并且变色
+			for(var i = 0; i < 9; i++) {
+				mytable.rows[i].cells[0].setAttribute("style",mytable.rows[i].cells[0].getAttribute('style')+";border-left:#1fc63e solid 3px;");
+				mytable.rows[i].cells[3].setAttribute("style",mytable.rows[i].cells[3].getAttribute('style')+";border-left:#1fc63e solid 3px;");
+				mytable.rows[i].cells[6].setAttribute("style",mytable.rows[i].cells[6].getAttribute('style')+";border-left:#1fc63e solid 3px;");
+				mytable.rows[0].cells[i].setAttribute("style",mytable.rows[0].cells[i].getAttribute('style')+";border-top:#1fc63e solid 3px;");
+				mytable.rows[3].cells[i].setAttribute("style",mytable.rows[3].cells[i].getAttribute('style')+";border-top:#1fc63e solid 3px;");
+				mytable.rows[6].cells[i].setAttribute("style",mytable.rows[6].cells[i].getAttribute('style')+";border-top:#1fc63e solid 3px;");
+				mytable.rows[8].cells[i].setAttribute("style",mytable.rows[8].cells[i].getAttribute('style')+";border-bottom:#1fc63e solid 3px;");
+				mytable.rows[i].cells[8].setAttribute("style",mytable.rows[i].cells[8].getAttribute('style')+";border-right:#1fc63e solid 3px;");
+			}
 			document.getElementById("btn_reset").style.visibility="hidden"
 			document.getElementById("btn_group").style.visibility="visible"
 		}
 		
 		//返回某行的所有值
 		function isXRepeat(y,arr) {
-			var arry = [];
+			var arry = [];	
 			for(var i = 0;i < 9; i++) {
 				if(arr[i][y] != null) arry.push(arr[i][y]);
 			}
@@ -208,3 +219,5 @@
 		};
 		//重复次数的函数
 		const countOccurences = (arr, value) => arr.reduce((a, v) => v === value ? a + 1 : a + 0, 0);
+		
+
