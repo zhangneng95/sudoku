@@ -154,8 +154,10 @@
 				}while(num1 == num2)
 				mytable.rows[j-1+Math.floor(num1/3)].cells[k-1+(num1%3)].innerHTML = "";
 				mytable.rows[j-1+Math.floor(num1/3)].cells[k-1+(num1%3)].contentEditable = "true";
+				mytable.rows[j-1+Math.floor(num1/3)].cells[k-1+(num1%3)].style.background = "#eee";
 				mytable.rows[j-1+Math.floor(num2/3)].cells[k-1+(num2%3)].innerHTML = "";
 				mytable.rows[j-1+Math.floor(num2/3)].cells[k-1+(num2%3)].contentEditable = "true";
+				mytable.rows[j-1+Math.floor(num2/3)].cells[k-1+(num2%3)].style.background = "#eee";
 			}
 			
 		}
